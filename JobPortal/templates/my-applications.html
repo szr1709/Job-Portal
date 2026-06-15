@@ -1,0 +1,72 @@
+{% extends 'master/base.html' %}
+
+{% block body %}
+<h1>My Applications List</h1>
+
+{% for job in application_list %}
+<div class="card shadow-sm border-0 mb-3 mt-2">
+    <div class="card-body">
+        <div class="d-flex align-items-center">
+
+            <!-- Company Logo -->
+            <div class="flex-shrink-0 me-3">
+                {% if job.applied_job.posted_by.logo %}
+                    <img src="{{ job.applied_job.posted_by.logo.url }}"
+                         alt="{{ job.applied_job.posted_by.company_name }}"
+                         class="rounded"
+                         style="width:80px;height:80px;object-fit:cover;">
+                {% else %}
+                    <div class="border rounded d-flex align-items-center justify-content-center"
+                         style="width:80px;height:80px;">
+                        No Logo
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Job Info -->
+            <div class="flex-grow-1">
+                <h5 class="mb-1">{{ job.applied_job.title }}</h5>
+
+                <p class="mb-1 text-muted">
+                    <strong>Company:</strong>
+                    {{ job.applied_job.posted_by.company_name }}
+                </p>
+
+                {% if job.applied_job.category %}
+                <p class="mb-1">
+                    <span class="badge bg-primary">
+                        {{ job.applied_job.category.name }}
+                    </span>
+                </p>
+                {% endif %}
+
+                <div class="row">
+                    <p class="mb-0 text-danger">
+                        <strong>Deadline:</strong>
+                        {{ job.applied_job.deadline }}
+                    </p>
+
+                    <p class="mb-0 text-success">
+                        <strong>Applied Date:</strong>
+                        {{ job.applied_at }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <span class="btn btn-sm btn-info">
+                    {{ job.status }}
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% empty %}
+<div class="alert alert-warning">
+    No applications found.
+</div>
+{% endfor %}
+
+{% endblock body %}

@@ -1,0 +1,104 @@
+{% extends 'master/base.html' %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Skill Match Job List</h1>
+
+    {% for job in job_data %}
+    <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+
+                <!-- Company Logo -->
+                <div class="flex-shrink-0 me-3">
+                    {% if job.posted_by.logo %}
+                    <img src="{{ job.posted_by.logo.url }}"
+                         alt="{{ job.posted_by.company_name }}"
+                         class="rounded"
+                         style="width:80px; height:80px; object-fit:cover;">
+                    {% else %}
+                    <div class="border rounded d-flex align-items-center justify-content-center"
+                         style="width:80px; height:80px;">
+                        No Logo
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Job Information -->
+                <div class="flex-grow-1">
+                    <h5 class="mb-1">{{ job.title }}</h5>
+
+                    <p class="mb-1 text-muted">
+                        <strong>Company:</strong>
+                        {{ job.posted_by.company_name }}
+                    </p>
+
+                    <p class="mb-1">
+                        {% if job.category %}
+                        <span class="badge bg-primary">
+                            {{ job.category.name }}
+                        </span>
+                        {% endif %}
+                    </p>
+
+                    <p class="mb-1">
+                        <strong>Skills:</strong>
+                        {{ job.skills_set }}
+                    </p>
+
+                    <p class="mb-1">
+                        <strong>Salary:</strong>
+                        {{ job.salary }}
+                    </p>
+
+                    <p class="mb-0 text-danger">
+                        <strong>Deadline:</strong>
+                        {{ job.deadline }}
+                    </p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="text-end">
+
+                    {% if request.user.user_type == 'Recruiter' %}
+                    <a href="{% url 'update_post_job_view' job.id %}"
+                       class="btn btn-warning btn-sm mb-1">
+                        Edit
+                    </a>
+
+                    <a href="{% url 'delete_post_job_view' job.id %}"
+                       class="btn btn-danger btn-sm mb-1">
+                        Delete
+                    </a>
+
+                    <a href="{% url 'candidate_list_view' job.id %}"
+                       class="btn btn-success btn-sm mb-1">
+                        Candidate List
+                    </a>
+                    {% endif %}
+
+                    <a href="{% url 'job_detail_view' job.id %}" class="btn btn-info btn-sm mb-1">
+                        View
+                    </a>
+
+                    {% if request.user.user_type != 'Recruiter' %}
+                    <a href="{% url 'apply_job_view' job.id %}"
+                       class="btn btn-primary btn-sm mb-1">
+                        Apply
+                    </a>
+                    {% endif %}
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% empty %}
+    <div class="alert alert-warning">
+        No matching jobs found.
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock body %}

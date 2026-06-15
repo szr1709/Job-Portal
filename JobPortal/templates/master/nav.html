@@ -1,0 +1,78 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Navbar</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+        <!-- Always visible -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'browse_job' %}">Browse Jobs</a>
+        </li>
+
+        {% if request.user.is_authenticated %}
+
+          <!-- ✅ SEEKER -->
+          {% if request.user.user_type == 'Seeker' %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'dashboard_page' %}">Dashboard</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'my_application' %}">My Applications</a>
+            </li>
+          {% endif %}
+
+          <!-- ⭐ RECRUITER -->
+          {% if request.user.user_type == 'Recruiter' %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'dashboard_page' %}">
+                Recruiter Dashboard
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'post_job_view' %}">
+                Post Job
+              </a>
+            </li>
+          {% endif %}
+
+          <!-- Common -->
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'profile_view' %}">Profile</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout_page' %}">Logout</a>
+          </li>
+
+        {% else %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'register_page' %}">Registration</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login_page' %}">Login</a>
+          </li>
+
+        {% endif %}
+
+      </ul>
+
+      <!-- Search -->
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+
+    </div>
+  </div>
+</nav>
